@@ -17,7 +17,7 @@ Widerplanet RTB 연동 가이드
     * [3.6 Object: App](#36-object-app)
     * [3.7 Object: Device](#37-object-device)
     * [3.8 Object: User](#38-object-user)
-    * [3.9 Object: Video](#39-object-user)
+    * [3.9 Object: Video](#39-object-video)
   * [4. 입찰 응답(Bid Response Specification)](#4-입찰-응답bid-response-specification)
     * [4.1 Object: BidResponse](#41-object-bidresponse)
     * [4.2 Object: SeatBid](#42-object-seatbid)
