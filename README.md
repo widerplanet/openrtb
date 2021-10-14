@@ -17,6 +17,7 @@ Widerplanet RTB 연동 가이드
     * [3.6 Object: App](#36-object-app)
     * [3.7 Object: Device](#37-object-device)
     * [3.8 Object: User](#38-object-user)
+    * [3.9 Object: Video](#39-object-user)
   * [4. 입찰 응답(Bid Response Specification)](#4-입찰-응답bid-response-specification)
     * [4.1 Object: BidResponse](#41-object-bidresponse)
     * [4.2 Object: SeatBid](#42-object-seatbid)
@@ -35,9 +36,11 @@ Widerplanet RTB 연동 가이드
     * [6.1 Bid Requests](#61-bid-requests)
       * [6.1.1 Example - 디스플레이 광고 요청](#611-example---디스플레이-광고-요청)
       * [6.1.2 Example - Native 광고 요청](#612-example---Native-광고-요청)
+      * [6.1.3 Example - Video 광고 요청](#613-example---Video-광고-요청)
     * [6.2 Bid Responses](#62-bid-responses)
       * [6.2.1 Example - 디스플레이 광고 응답](#621-example---디스플레이-광고-응답)
       * [6.2.2 Example - Native 광고 응답](#622-example---Native-광고-응답)
+      * [6.2.3 Example - Video 광고 응답](#623-example---Video-광고-응답)
   * [7. 쿠키교환 Cookie Matching - Cookie Sync](#7-쿠키교환-cookie-matching---cookie-sync)
 
 <br/><br/>
@@ -229,6 +232,27 @@ Native 형식의 Impression을 나타냅니다. Open RTB Native Spec에 의해 �
  buyeruid | string  | 필수          | Widerplanet 사용자 ID - 지면이 웹인 경우 id 또는 buyerid 값은 필수
 
 
+## 3.9 Object: Video
+
+비디오 광고. 비디오 광고 요청시 반드시 포함되어야 합니다.
+
+ Name          | Type         | 필수, 기본값 | Description                                                    
+:--------------|:-------------|:-------------|:---------------------------------------------------------------
+ mimes         | string array | 필수          | 콘텐츠 MIME 유형(widerplanet 은 video/mp4만 지원)                          
+ minduration   | Integer      |              | 최소 동영상 광고 재생 시간(초)입니다.
+ maxduration   | Integer      |              | 최대 동영상 광고 재생 시간(초)입니다.                        
+ protocols     | Integer array| 필수          | 지원되는 동영상 입찰 응답 프로토콜(widerplanet은 vast 3.0만 지원)
+ w             | Integer      |              | 비디오 플레이어의 너비(픽셀)입니다.                            
+ h             | Integer      |              | 비디오 플레이어의 높이(픽셀)입니다.
+ linearity     | Integer      | 필수          | 노출이 선형,비선형 여부를 나타냅니다.
+ skip          | Integer      | 필수          | 플레이어가 동영상 건너뛰기를 허용할지 여부를 나타냅니다.
+ skipmin       | Integer      | skip true 필수| skip을 할 수 있는 최소 비디오 시간(초)입니다.
+ skipafter     | Integer      | skip true 필수| skip 전에 비디오가 재생되어야 하는 시간(초)
+ battr         | Integer array|              | 차단 광고 속성 입니다.
+ playbackmethod| Integer array| 필수          | 허용된 재생 방법입니다.     
+ pos           | Integer      |              | 화면의 광고 위치
+ 
+ 
 <br/><br/>
 
 # 4. 입찰 응답(Bid Response Specification)
@@ -525,6 +549,105 @@ Widerplanet Native는 OpenRTB-Native-Ads-Specification-Final-1.2 를 기본으�
 }
 ```
 
+### 6.1.3 Example - Video 광고 요청
+
+```json
+{
+	"id": "a94aa51e-0940-4ab6-9f10-bd5ce9decbab",
+	"imp": [{
+		"video": {
+			"w": 320,
+			"skip": 0,
+			"linearity": 1,
+			"h": 480,
+			"startdelay": 0,
+			"pos": 7,
+			"mimes": [
+				"video/mp4"
+			],
+			"minduration": 5,
+			"protocols": [
+				2,
+				3
+			],
+			"battr": [
+				16
+			],
+			"maxduration": 15
+		},
+		"bidfloor": 0.5,
+		"bidfloorcur": "USD",
+		"instl": 1,
+		"id": "1"
+	}],
+	"device": {
+		"carrier": "SK Telecom",
+		"ua": "Mozilla/5.0 (Linux; U; Android 10; ko_KR; SM-N971N Build/unknown) AppleWebKit/535.30 (KHTML, like Gecko) Chrome/18.0.1025.133 Mobile Safari/535.19",
+		"ip": "223.39.202.129",
+		"language": "ko",
+		"make": "Samsung",
+		"model": "SM-N971N",
+		"os": "Android",
+		"osv": "10",
+		"devicetype": 4,
+		"ifa": "494cf0e4-99fc-4800-bc34-012345678901",
+		"js": 1,
+		"connectiontype": 3,
+		"dpidsha1": "700000000230297ba2108232e84c23d952ad5eed",
+		"dpidmd5": "4bcca03eee7b0e00440asd2342342342",
+		"geo": {
+			"lat": 37.5985,
+			"lon": 126.9783,
+			"type": 2,
+			"city": "Seoul",
+			"zip": "02878",
+			"country": "KOR",
+			"region": "11"
+		},
+		"dnt": 0,
+		"lmt": 0
+	},
+	"app": {
+		"id": "1233434",
+		"name": "앱 이름",
+		"bundle": "com.testapp",
+		"storeurl": "https://play.google.com/store/apps/details?id=com.testapp",
+		"keywords": "Massenger&Community",
+		"cat": [
+			"IAB3"
+		],
+		"publisher": {
+			"name": "(주)매체",
+			"id": "a345434e-31ba-488c-939c-290c48d577e4"
+		}
+	},
+	"allimps": 0,
+	"cur": [
+		"USD"
+	],
+	"tmax": 1984,
+	"bcat": [
+		"IAB18-3",
+		"IAB22-1",
+		"IAB22-2",
+		"IAB22-4",
+		"IAB18",
+		"IAB24",
+		"IAB22-3",
+		"IAB22",
+		"IAB13",
+		"IAB26-1",
+		"IAB26",
+		"IAB1"
+	],
+	"badv": [
+		"block.com",
+		"adv_test.com"
+	],
+	"at": 1
+}
+```
+
 
 ## 6.2 Bid Responses
 
@@ -604,6 +727,42 @@ Widerplanet Native는 OpenRTB-Native-Ads-Specification-Final-1.2 를 기본으�
     }
   ],
   "bidid": "4249acf3de5c84dc10542e2dfb34202216057706612450000542",
+  "cur": "USD"
+}
+```
+
+### 6.2.3 Example - Video 광고 응답
+
+```json
+{
+  "id": "a28a5a7a-e02b-441b-8916-438c8e4b72b3",
+  "seatbid": [
+    {
+      "bid": [
+        {
+          "id": "eaebc6fafe2477253e8ce3e6d0810d9516330820306656730281",
+          "impid": "1",
+          "price": 5.6,
+          "burl": "https://algd.widerplanet.com/delivery/lg.php?currid=h&shd_id=1&engine=3.0&v=1&zoneid=29878&lid=44192&dlid=eaebc6fafe2477253e8ce3e6d0810d9516330820306656730281&rvt=1&gpr=2s&v_resp=2.1&dmpc=5&dmpsc=51954&dmpsp=0&os=android&appid=com.dk.jelly_adventure&zct=1&cb=a9044b29fd&dtype=video&ctype=401&bannerid=4311844&campaignid=343468&rv=cre66i9s&OACBLOCK=86400&OABLOCK=3600&OACAP=100&cid=5182890&qsc=10ab6sb&wp=${AUCTION_PRICE:B64}&render_type=video&bst=1&bsui=qG7-I1_s7PwQeG0sniGP_X5F-jyBElD1IuVkJ5DZ6jZeRU1ckXHfEqg3GW8PQZ1aSFB-kcBbA09culELIAxaSXQ-GmzSnuXgjtJXe3qjgZJ9WPseCreROix_6NqT7v7f8QpZPrkr-FQ479czh3GCBGwUNVJcaORgYHk6C1zMwPg.&OXLIA=1&sl=adpopcorn&eb=KR&ebt=0&er2=MC4wMDMwNTczMjk0NQ==",
+          "adm": "https://angd.widerplanet.com/delivery/vast.xml?cb=43ce7ac73e&cid=343468&crid=5182890&c_type=401&d_type=video&ad_id=4311844&v=1&sl=adpopcorn&zoneid=29878&dlid=eaebc6fafe2477253e8ce3e6d0810d9516330820306656730281&rv=cre66i9s&rvt=1&dmpc=5&dmpsc=51954&dmpsp=0&shd_id=1&vid=412&skp_tm=0&qsc=sdef65",
+          "adomain": [
+            "www.widerplanett.com"
+          ],
+          "bundle": "com.iherb",
+          "iurl": "https://cdn-aitg.widerplanet.com/images/video1/44192/2021012810202455416fb149d448ab60087ce4f6f940c1.mp4",
+          "cid": "343468",
+          "crid": "44192_5182890_1x1__KOR",
+          "cat": [
+            "IAB9-30",
+            "IAB9-25"
+          ],
+          "w": 1,
+          "h": 1
+        }
+      ]
+    }
+  ],
+  "bidid": "eaebc6fafe2477253e8ce3e6d0810d9516330820306656730281",
   "cur": "USD"
 }
 ```
